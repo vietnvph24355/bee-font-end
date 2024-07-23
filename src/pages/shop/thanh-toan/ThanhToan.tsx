@@ -588,6 +588,11 @@ const ThanhToan = ({ tamTinh, dataSanPham, soSanPham }) => {
                     Thanh toán qua cổng VNPAY
                   </Card>
                 </Radio>
+                {/* <Radio value={1}>
+                  <Card style={{ width: "450px" }}>
+                    Thanh toánkhi nhận hàng & qua cổng VNPAY
+                  </Card>
+                </Radio> */}
               </Space>
             </Radio.Group>
           </Form.Item>

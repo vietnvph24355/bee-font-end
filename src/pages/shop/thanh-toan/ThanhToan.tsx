@@ -284,7 +284,7 @@ const ThanhToan = ({ tamTinh, dataSanPham, soSanPham }) => {
                   await requestClient.get(`don-hang/sendEmail/${res.data.id}`);
                   message.success("Đặt hàng thành công");
                   setLoading(false);
-                  navigate("/thong-tin-don-hang");
+                  navigate("/don-hang");
                 } catch (error) {
                   console.log(error);
                 }

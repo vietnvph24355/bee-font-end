@@ -30,7 +30,7 @@ function HinhAnhModal({ openModal, closeModal, mauSac, sanPham }) {
 
       const newFileList = res.data.map((item) => ({
         status: "done",
-        url: `http://localhost:8080/admin/api/file/view/${item.duongDan}`,
+        url: `http://localhost:8081/admin/api/file/view/${item.duongDan}`,
       }));
 
       setFileList(newFileList);
@@ -133,7 +133,7 @@ function HinhAnhModal({ openModal, closeModal, mauSac, sanPham }) {
       >
         <ImgCrop rotationSlider>
           <Upload
-            action="http://localhost:8080/admin/api/file/upload"
+            action="http://localhost:8081/admin/api/file/upload"
             listType="picture-card"
             fileList={fileList}
             onChange={onChange}

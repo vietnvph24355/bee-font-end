@@ -44,6 +44,7 @@ const ThongKe: React.FC = () => {
         params: { ngay: date.format("YYYY-MM-DD") },
       });
       setThongKeNgay(res.data);
+      console.log("thongKeNgay toi da log:", res.data); // Log giá trị nhận được từ API
     } catch (e) {
       console.log("lỗi");
     }
@@ -83,7 +84,7 @@ const ThongKe: React.FC = () => {
         params: thang,
       });
       setThongKeThang(res.data);
-      console.log(res);
+      console.log(res);      
     } catch (e) {
       console.log("lỗi");
     }
@@ -177,7 +178,7 @@ const ThongKe: React.FC = () => {
             <Space>
               Tổng số đơn hủy:
               <Text strong>
-                {thongKeNgay !== null ? thongKeNgay.tongSoDonHuy : 0}
+                {thongKeNgay !== null ? thongKeNgay.tongSoDonHuy : 31}
               </Text>
             </Space>
             <br />

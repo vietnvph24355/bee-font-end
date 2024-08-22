@@ -101,12 +101,12 @@ function AddVoucherKhachHang() {
             navigate("/admin/voucher");
           } catch (error) {
             console.log(error);
-            message.error(error.response.data.message);
+            message.error(error.response.data);
             setLoading(false);
           }
         } catch (error: any) {
           console.log(error);
-          message.error(error.response.data.message);
+          message.error(error.response.data);
           setLoading(false);
         }
       },
@@ -255,8 +255,7 @@ function AddVoucherKhachHang() {
           form={form}
           onFinish={onFinish}
           labelCol={{ span: 6 }}
-          wrapperCol={{ span: 17 }}
-        >
+          wrapperCol={{ span: 17 }}>
           <Form.Item
             name="ten"
             label="Tên voucher"
@@ -266,16 +265,14 @@ function AddVoucherKhachHang() {
                 whitespace: true,
                 message: "Vui lòng điền tên voucher!",
               },
-            ]}
-          >
+            ]}>
             <Input />
           </Form.Item>
           <Form.Item
             noStyle
             shouldUpdate={(prevValues, currentValues) =>
               prevValues.soLanSuDung !== currentValues.soLanSuDung
-            }
-          >
+            }>
             {({ getFieldValue }) =>
               getFieldValue("soLanSuDung") === 1 ? (
                 <Form.Item
@@ -283,8 +280,7 @@ function AddVoucherKhachHang() {
                   label="Số lượng"
                   rules={[
                     { required: true, message: "Bạn chưa điền số lượng!" },
-                  ]}
-                >
+                  ]}>
                   <InputNumber
                     defaultValue={0}
                     style={{ width: "100%" }}
@@ -304,8 +300,7 @@ function AddVoucherKhachHang() {
                 required: true,
                 message: "Vui lòng chọn ngày bắt đầu ~ ngày kết thúc !",
               },
-            ]}
-          >
+            ]}>
             <DatePicker.RangePicker
               style={{ width: "100%" }}
               presets={[
@@ -331,23 +326,20 @@ function AddVoucherKhachHang() {
                 required: true,
                 message: "Vui lòng chọn hình thức giảm giá !",
               },
-            ]}
-          >
+            ]}>
             <Select
               onChange={onChangeHinhThucGiamGia}
               placeholder="Chọn hình thức giảm giá"
               options={dataHinhThucGiamGia.map((values: any) => ({
                 label: values.ten,
                 value: values.id,
-              }))}
-            ></Select>
+              }))}></Select>
           </Form.Item>
           <Form.Item
             noStyle
             shouldUpdate={(prevValues, currentValues) =>
               prevValues.hinhThucGiam !== currentValues.hinhThucGiam
-            }
-          >
+            }>
             {({ getFieldValue }) =>
               getFieldValue("hinhThucGiam") === 1 ? (
                 <>
@@ -360,8 +352,7 @@ function AddVoucherKhachHang() {
                         required: true,
                         message: "Bạn chưa điền đơn tối thiểu!",
                       },
-                    ]}
-                  >
+                    ]}>
                     <InputNumber
                       style={{ width: "100%" }}
                       min={0}
@@ -378,8 +369,7 @@ function AddVoucherKhachHang() {
                         required: true,
                         message: "Bạn chưa điền đơn tối thiểu!",
                       },
-                    ]}
-                  >
+                    ]}>
                     <InputNumber
                       // defaultValue={0}
                       style={{ width: "100%" }}
@@ -401,8 +391,7 @@ function AddVoucherKhachHang() {
                         required: true,
                         message: "Bạn chưa điền đơn tối thiểu!",
                       },
-                    ]}
-                  >
+                    ]}>
                     <InputNumber
                       style={{ width: "100%" }}
                       min={0}
@@ -433,8 +422,7 @@ function AddVoucherKhachHang() {
                           return Promise.resolve();
                         },
                       },
-                    ]}
-                  >
+                    ]}>
                     <InputNumber
                       defaultValue={0}
                       style={{ width: "100%" }}
@@ -463,8 +451,7 @@ function AddVoucherKhachHang() {
                           return Promise.resolve();
                         },
                       },
-                    ]}
-                  >
+                    ]}>
                     <InputNumber
                       defaultValue={0}
                       style={{ width: "100%" }}
@@ -486,8 +473,7 @@ function AddVoucherKhachHang() {
               <Button
                 type="dashed"
                 htmlType="reset"
-                style={{ margin: "0 12px" }}
-              >
+                style={{ margin: "0 12px" }}>
                 Reset
               </Button>
               <Button type="primary" htmlType="submit" loading={loading}>

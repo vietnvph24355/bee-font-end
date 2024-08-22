@@ -69,11 +69,7 @@ function ModalAddDiaChi({ openModal, closeModal }) {
           setLoading(true);
           values.diaChi = diaChi;
           values.trangThaiDiaChi =
-            values.trangThaiDiaChi === undefined
-              ? "DEFAULT"
-              : values.trangThaiDiaChi === true
-              ? "DEFAULT"
-              : "ACTIVE";
+            values.trangThaiDiaChi === undefined ? "ACTIVE" : "DEFAULT";
           const idTaiKhoan = localStorage.getItem("acountId");
           const local123 = localStorage.getItem("refreshToken");
           const response = await requestDC.post(
@@ -265,8 +261,7 @@ function ModalAddDiaChi({ openModal, closeModal }) {
       title="Địa chỉ của tôi"
       open={openModal}
       onCancel={closeModal}
-      footer
-    >
+      footer>
       <Form form={form} onFinish={onSubmit} {...formItemLayout}>
         <Form.Item
           name="hoVaTen"
@@ -281,8 +276,7 @@ function ModalAddDiaChi({ openModal, closeModal }) {
               pattern: /^[\p{L}\s']+$/u,
               message: "Họ và tên không hợp lệ!",
             },
-          ]}
-        >
+          ]}>
           <Input />
         </Form.Item>
         <Form.Item
@@ -298,8 +292,7 @@ function ModalAddDiaChi({ openModal, closeModal }) {
               pattern: /^0[35789]\d{8}$/,
               message: "Số điện thoại không hợp lệ!",
             },
-          ]}
-        >
+          ]}>
           <Input />
         </Form.Item>
         <Form.Item
@@ -315,8 +308,7 @@ function ModalAddDiaChi({ openModal, closeModal }) {
               type: "email",
               message: "E-mail không hợp lệ!",
             },
-          ]}
-        >
+          ]}>
           <Input />
         </Form.Item>
         <Form.Item
@@ -327,8 +319,7 @@ function ModalAddDiaChi({ openModal, closeModal }) {
               required: true,
               message: "Bạn chưa điền Tỉnh / Thành !",
             },
-          ]}
-        >
+          ]}>
           <Select
             options={provinces}
             placeholder="Tỉnh/ Thành Phố"
@@ -349,8 +340,7 @@ function ModalAddDiaChi({ openModal, closeModal }) {
               required: true,
               message: "Bạn chưa điền Quận / Huyện!",
             },
-          ]}
-        >
+          ]}>
           <Select
             options={districts}
             placeholder="Quận / Huyện"
@@ -368,8 +358,7 @@ function ModalAddDiaChi({ openModal, closeModal }) {
               required: true,
               message: "Bạn chưa điền Phường / Xã !",
             },
-          ]}
-        >
+          ]}>
           <Select options={wards} placeholder="Phường / Xã" />
         </Form.Item>
         <Form.Item
@@ -381,8 +370,7 @@ function ModalAddDiaChi({ openModal, closeModal }) {
               whitespace: true,
               message: "Bạn chưa điền đia chỉ!",
             },
-          ]}
-        >
+          ]}>
           <Input />
         </Form.Item>
 
@@ -398,8 +386,7 @@ function ModalAddDiaChi({ openModal, closeModal }) {
               style={{ marginRight: "110px" }}
               type="primary"
               htmlType="submit"
-              loading={loading}
-            >
+              loading={loading}>
               Thêm
             </Button>
           </Space>

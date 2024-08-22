@@ -305,8 +305,7 @@ export function UpdateVoucherKhachHang({ id }) {
           form={form}
           onFinish={onFinish}
           labelCol={{ span: 6 }}
-          wrapperCol={{ span: 14 }}
-        >
+          wrapperCol={{ span: 14 }}>
           <Form.Item label="mã voucher">
             <Text strong>{form.getFieldValue("ma")}</Text>
           </Form.Item>
@@ -319,8 +318,7 @@ export function UpdateVoucherKhachHang({ id }) {
                 whitespace: true,
                 message: "Vui lòng điền tên voucher!",
               },
-            ]}
-          >
+            ]}>
             <Input />
           </Form.Item>
 
@@ -332,8 +330,7 @@ export function UpdateVoucherKhachHang({ id }) {
                 required: true,
                 message: "Vui lòng chọn ngày bắt đầu ~ ngày kết thúc !",
               },
-            ]}
-          >
+            ]}>
             <DatePicker.RangePicker
               style={{ width: "100%" }}
               presets={[
@@ -359,23 +356,20 @@ export function UpdateVoucherKhachHang({ id }) {
                 required: true,
                 message: "Vui lòng chọn hình thức giảm giá !",
               },
-            ]}
-          >
+            ]}>
             <Select
               onChange={onChangeHinhThucGiamGia}
               placeholder="Chọn hình thức giảm giá"
               options={dataHinhThucGiamGia.map((values: any) => ({
                 label: values.ten,
                 value: values.id,
-              }))}
-            ></Select>
+              }))}></Select>
           </Form.Item>
           <Form.Item
             noStyle
             shouldUpdate={(prevValues, currentValues) =>
               prevValues.hinhThucGiam !== currentValues.hinhThucGiam
-            }
-          >
+            }>
             {({ getFieldValue }) =>
               getFieldValue("hinhThucGiam") === 1 ? (
                 <>
@@ -388,8 +382,7 @@ export function UpdateVoucherKhachHang({ id }) {
                         required: true,
                         message: "Bạn chưa điền đơn tối thiểu!",
                       },
-                    ]}
-                  >
+                    ]}>
                     <InputNumber
                       style={{ width: "100%" }}
                       min={0}
@@ -406,8 +399,7 @@ export function UpdateVoucherKhachHang({ id }) {
                         required: true,
                         message: "Bạn chưa điền đơn tối thiểu!",
                       },
-                    ]}
-                  >
+                    ]}>
                     <InputNumber
                       // defaultValue={0}
                       style={{ width: "100%" }}
@@ -429,8 +421,7 @@ export function UpdateVoucherKhachHang({ id }) {
                         required: true,
                         message: "Bạn chưa điền đơn tối thiểu!",
                       },
-                    ]}
-                  >
+                    ]}>
                     <InputNumber
                       style={{ width: "100%" }}
                       min={0}
@@ -461,8 +452,7 @@ export function UpdateVoucherKhachHang({ id }) {
                           return Promise.resolve();
                         },
                       },
-                    ]}
-                  >
+                    ]}>
                     <InputNumber
                       defaultValue={0}
                       style={{ width: "100%" }}
@@ -491,8 +481,7 @@ export function UpdateVoucherKhachHang({ id }) {
                           return Promise.resolve();
                         },
                       },
-                    ]}
-                  >
+                    ]}>
                     <InputNumber
                       defaultValue={0}
                       style={{ width: "100%" }}

@@ -137,7 +137,7 @@ export function UpdateVoucherHoaDon() {
         } catch (error: any) {
           console.log(values);
           if (error.response && error.response.status === 400) {
-            message.error(error.response.data.message);
+            message.error(error.response.data);
           } else {
             console.error("Lỗi không xác định:", error);
             message.error("Cập nhật voucher thất bại");
@@ -199,8 +199,7 @@ export function UpdateVoucherHoaDon() {
             onFinish={onFinish}
             labelCol={{ span: 9 }}
             wrapperCol={{ span: 16 }}
-            style={{ maxWidth: 750 }}
-          >
+            style={{ maxWidth: 750 }}>
             <Form.Item label="mã voucher">
               <Text strong>{form.getFieldValue("ma")}</Text>
             </Form.Item>
@@ -213,8 +212,7 @@ export function UpdateVoucherHoaDon() {
                   whitespace: true,
                   message: "Vui lòng điền tên voucher!",
                 },
-              ]}
-            >
+              ]}>
               <Input />
             </Form.Item>
 
@@ -226,8 +224,7 @@ export function UpdateVoucherHoaDon() {
                   required: true,
                   message: "Vui lòng chọn ngày bắt đầu ~ ngày kết thúc !",
                 },
-              ]}
-            >
+              ]}>
               <DatePicker.RangePicker
                 style={{ width: "100%" }}
                 presets={[
@@ -253,23 +250,20 @@ export function UpdateVoucherHoaDon() {
                   required: true,
                   message: "Vui lòng chọn hình thức giảm giá !",
                 },
-              ]}
-            >
+              ]}>
               <Select
                 onChange={onChangeHinhThucGiamGia}
                 placeholder="Chọn hình thức giảm giá"
                 options={dataHinhThucGiamGia.map((values: any) => ({
                   label: values.ten,
                   value: values.id,
-                }))}
-              ></Select>
+                }))}></Select>
             </Form.Item>
             <Form.Item
               noStyle
               shouldUpdate={(prevValues, currentValues) =>
                 prevValues.hinhThucGiam !== currentValues.hinhThucGiam
-              }
-            >
+              }>
               {({ getFieldValue }) =>
                 getFieldValue("hinhThucGiam") === 1 ? (
                   <>
@@ -282,8 +276,7 @@ export function UpdateVoucherHoaDon() {
                           required: true,
                           message: "Bạn chưa điền đơn tối thiểu!",
                         },
-                      ]}
-                    >
+                      ]}>
                       <InputNumber
                         style={{ width: "100%" }}
                         min={0}
@@ -300,8 +293,7 @@ export function UpdateVoucherHoaDon() {
                           required: true,
                           message: "Bạn chưa điền đơn tối thiểu!",
                         },
-                      ]}
-                    >
+                      ]}>
                       <InputNumber
                         defaultValue={0}
                         style={{ width: "100%" }}
@@ -323,8 +315,7 @@ export function UpdateVoucherHoaDon() {
                           required: true,
                           message: "Bạn chưa điền đơn tối thiểu!",
                         },
-                      ]}
-                    >
+                      ]}>
                       <InputNumber
                         style={{ width: "100%" }}
                         min={0}
@@ -355,8 +346,7 @@ export function UpdateVoucherHoaDon() {
                             return Promise.resolve();
                           },
                         },
-                      ]}
-                    >
+                      ]}>
                       <InputNumber
                         defaultValue={0}
                         style={{ width: "100%" }}
@@ -385,8 +375,7 @@ export function UpdateVoucherHoaDon() {
                             return Promise.resolve();
                           },
                         },
-                      ]}
-                    >
+                      ]}>
                       <InputNumber
                         defaultValue={0}
                         style={{ width: "100%" }}
@@ -409,8 +398,7 @@ export function UpdateVoucherHoaDon() {
                   type="primary"
                   htmlType="button"
                   danger
-                  onClick={clickHuyBo}
-                >
+                  onClick={clickHuyBo}>
                   Hủy bỏ
                 </Button>
               </Space>

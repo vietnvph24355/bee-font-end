@@ -194,6 +194,7 @@ const detailSanPham: React.FC = () => {
   };
 
   const onFinish = async () => {
+    // Kiểm tra thông tin sản phẩm
     if (
       idMauSac === null ||
       idKichCo === null ||
@@ -202,22 +203,23 @@ const detailSanPham: React.FC = () => {
     ) {
       message.error("Bạn chưa nhập thông tin sản phẩm muốn thêm vào giỏ hàng");
       return;
-    } else if (totalQuantity == 0) {
+    } else if (totalQuantity <= 0) { // Kiểm tra số lượng tồn kho
       message.error("Sản phẩm đã hết hàng");
       return;
     }
-
+  
     try {
       let cartId;
-
-      // If idGioHangTaiKhoan is not null, use it directly
+  
+      // Không null thì sử dụng trực tiếp
       if (idGioHangTaiKhoan != null) {
         cartId = idGioHangTaiKhoan;
       } else {
         // Otherwise, use the provided idGioHangNull or generate a new one
         cartId = await getCartId();
       }
-
+  
+      // Lấy thông tin chi tiết sản phẩm
       const productResponse = await request.get(
         "/chi-tiet-san-pham/get-one/" + id,
         {
@@ -229,16 +231,36 @@ const detailSanPham: React.FC = () => {
           },
         }
       );
-
+  
       if (productResponse.data) {
+        const productDetail = productResponse.data;
+        const stockQuantity = productDetail.soLuong; // Số lượng tồn kho
+  
+        // Lấy số lượng hiện tại trong giỏ hàng
+        const cartResponse = await request.get(`/gio-hang/${cartId}`);
+        const cartItems = cartResponse.data.gioHangChiTietList || [];
+        const existingItem = cartItems.find(
+          (item: any) => item.chiTietSanPham.id === productDetail.id
+        );
+  
+        const existingQuantity = existingItem ? existingItem.soLuong : 0;
+        const totalQuantityInCart = existingQuantity + quantity; // Tổng số lượng dự kiến
+  
+        // Kiểm tra số lượng tồn kho
+        if (totalQuantityInCart > stockQuantity) {
+          message.warning(`Số lượng giỏ hàng của bạn đã vượt quá số lượng trong kho là ${stockQuantity}`);
+          return; // Dừng lại không thêm sản phẩm
+        }
+  
+        // Thêm sản phẩm vào giỏ hàng nếu số lượng hợp lệ
         await request.post("/gio-hang-chi-tiet", {
           gioHang: {
             id: cartId,
           },
           soLuong: quantity,
-          chiTietSanPham: { id: productResponse.data.id },
+          chiTietSanPham: { id: productDetail.id },
         });
-
+  
         message.success("Thêm sản phẩm vào giỏ hàng thành công");
         await navigate("/gio-hang");
       }
@@ -247,6 +269,7 @@ const detailSanPham: React.FC = () => {
       console.log(error);
     }
   };
+  
 
   const handleMauSac = (event) => {
     setIdMauSac(event.id !== idMauSac ? event.id : null);

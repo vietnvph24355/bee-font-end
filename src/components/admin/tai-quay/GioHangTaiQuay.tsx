@@ -459,14 +459,19 @@ const GioHangTaiQuay: React.FC<{ id: number; loadHoaDon: () => void }> = ({
             },
             trangThaiGiaoDich: selectedRadio == 2 ? "PENDING" : "SUCCESS",
           });
+          //Gọi API VNPay nếu phương thức thanh toán là VNPay:
           if (resGD.status == 201 && selectedRadio == 2) {
             const resVNPay = await request.get("vn-pay/create-payment", {
               params: {
                 soTienThanhToan: tongTienKhiGiam,
-                maGiaoDich: resGD.data.maGiaoDich,
+                maGiaoDich: resGD.data.maGiaoDich,                                
               },
             });
+            // Log URL chuyển hướng trước khi thực hiện chuyển hướng
+            console.log(" URL cần test khi tt vnpay giao hàng:", resVNPay.data);
             window.location.href = resVNPay.data;
+            
+
           }
         } catch (error) {
           console.log(error);
@@ -662,7 +667,7 @@ const GioHangTaiQuay: React.FC<{ id: number; loadHoaDon: () => void }> = ({
             <Divider />
             {checked ? (
               <>
-                <Card title="Thông tin nhận hàng">
+                <Card title="Thông tin nhận hàng TQ">
                   <ThongTinGiaoHang
                     onFullAddressChange={handleFullAddressChange}
                     onFeeResponseChange={handleFeeResponseChange}
@@ -888,6 +893,7 @@ const GioHangTaiQuay: React.FC<{ id: number; loadHoaDon: () => void }> = ({
                 </Col>
               </Row>
             )}
+            {/* //thanh toán giao hàng và sd vienpay */}
             {isPaymentSelected && checked && !isCashSelected && (
               <Row>
                 <Col span={24}>

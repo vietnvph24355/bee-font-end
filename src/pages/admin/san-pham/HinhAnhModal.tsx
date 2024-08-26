@@ -78,9 +78,10 @@ function HinhAnhModal({ openModal, closeModal, mauSac, sanPham }) {
     );
   };
   const onRemove = (file: UploadFile) => {
-    request
-      .delete(`file/delete/${file.response}`)
-      .then((response) => {
+    request    
+      .delete(`file/delet/${file.response}`)
+      .then((response) => {        
+        
         if (response.status === 200) {
           setFileList(
             fileList.filter((item) => item.response !== file.response)
@@ -90,7 +91,7 @@ function HinhAnhModal({ openModal, closeModal, mauSac, sanPham }) {
         }
       })
       .catch((error) => {
-        message.error("Xóa ảnh thất bại");
+        message.error("Xóa ảnh thất bạiiiii");
         console.error(error);
       });
   };

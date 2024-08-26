@@ -371,15 +371,29 @@ function AddVoucherKhachHang() {
                     />
                   </Form.Item>
                   <Form.Item
-                    name="giamToiDa"
-                    label="Số tiền giảm"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Bạn chưa điền đơn tối thiểu!",
-                      },
-                    ]}
-                  >
+                      name="giamToiDa"
+                      label="Số tiền giảm"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Bạn chưa điền số tiền giảm!",
+                        },
+                        {
+                          validator: (_, value) => {
+                            const donToiThieu =
+                              form.getFieldValue("donToiThieu");
+                            if (value >= donToiThieu) {
+                              return Promise.reject(
+                                new Error(
+                                  "Số tiền giảm phải nhỏ hơn đơn tối thiểu!"
+                                )
+                              );
+                            }
+                            return Promise.resolve();
+                          },
+                        },
+                      ]}
+                    >
                     <InputNumber
                       // defaultValue={0}
                       style={{ width: "100%" }}

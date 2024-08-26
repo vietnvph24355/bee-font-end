@@ -415,7 +415,7 @@ const SanPham: React.FC = () => {
         setTotalElements(res.data.totalElements);
       } catch (error) {
         console.log(error);
-        message.error("Lấy dữ liệu sản phẩm thất bại");
+        message.error("Lấy dữ liệu sản phẩm thất bạiii");
       }
     };
 
@@ -461,7 +461,7 @@ const SanPham: React.FC = () => {
         <Col span={15} style={{ marginLeft: 30 }}>
           <Space>
             <p style={{ fontWeight: "bold", float: "left" }}>
-              DANH SÁCH SẢN PHẨM
+              DANH SÁCH SẢN PHẨMM
             </p>
             <Affix offsetTop={top}>
               <Input

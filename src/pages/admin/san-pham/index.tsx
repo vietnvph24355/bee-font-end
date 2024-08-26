@@ -160,7 +160,7 @@ const index: React.FC = () => {
       } catch (error) {
         console.log(error);
         setLoading(false);
-        message.error("Lấy dữ liệu sản phẩm thất bại");
+        message.error("Lấy dữ liệu sản phẩm thất bạiiiii");
       }
     };
     fetchData();

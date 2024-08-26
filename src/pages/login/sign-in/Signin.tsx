@@ -51,15 +51,28 @@ const DangNhap: React.FC = () => {
       message.success("Đăng nhập thành công");
     } catch (error: any) {
       console.log("Error:", error);
-      console.log("A123" + error.response.data.message);
-      if (error.response && error.response.status === 403) {
-        message.error("Tài khoản hoặc mật khẩu không tồn tại.");
-      } else if (error.response && error.response.data) {
-        message.error(error.response.data.message);
+  
+      // Kiểm tra xem có phản hồi từ server hay không
+      if (error.response) {
+          const status = error.response.status;
+          const data = error.response.data;
+  
+          if (status === 403) {
+              // Thông báo lỗi khi tài khoản bị khóa
+              message.error("Tài khoản của bạn đã bị khóa.");
+          } else if (data && data.message) {
+              // Thông báo lỗi cụ thể từ server
+              message.error(data.message);
+          } else {
+              // Thông báo lỗi chung khi không có thông tin cụ thể
+              message.error("Có lỗi xảy ra khi đăng nhập.");
+          }
       } else {
-        message.error("Có lỗi xảy ra khi đăng nhập.");
+          // Thông báo lỗi khi không có phản hồi từ server
+          message.error("Có lỗi xảy ra khi kết nối với máy chủ.");
       }
-    } finally {
+  }
+   finally {
       setLoading(false);
     }
   };

@@ -66,16 +66,21 @@ function ModalAddDiaChi({ openModal, closeModal }) {
       cancelText: "Hủy",
       onOk: async () => {
         try {
+          
           setLoading(true);
           values.diaChi = diaChi;
           values.trangThaiDiaChi =
-            values.trangThaiDiaChi === undefined
-              ? "DEFAULT"
-              : values.trangThaiDiaChi === true
-              ? "DEFAULT"
-              : "ACTIVE";
+            // values.trangThaiDiaChi === undefined
+            //   ? "DEFAULT"
+            //   : values.trangThaiDiaChi === true
+            //   ? "DEFAULT"
+            //   : "ACTIVE";
+            values.trangThaiDiaChi === undefined ? "ACTIVE" : "DEFAULT";
           const idTaiKhoan = localStorage.getItem("acountId");
           const local123 = localStorage.getItem("refreshToken");
+          console.log("ID Tài Khoản:", idTaiKhoan); // In giá trị của idTaiKhoan
+          console.log("Refresh Token:", local123); // In giá trị của refreshToken
+          
           const response = await requestDC.post(
             `/dia-chi/add?id=${idTaiKhoan}`,
             values,
@@ -85,6 +90,7 @@ function ModalAddDiaChi({ openModal, closeModal }) {
               },
             }
           );
+          
           console.log("Response from API:", response); // In dữ liệu từ API
           setLoading(false);
           message.success("Thêm địa chỉ mới thành công");
@@ -195,68 +201,63 @@ function ModalAddDiaChi({ openModal, closeModal }) {
   }, []);
 
   const loadData = async (selectedOptions: Option[]) => {
-    const targetOption = selectedOptions[selectedOptions.length - 1];
+  const targetOption = selectedOptions[selectedOptions.length - 1];
 
-    if (targetOption && typeof targetOption.value === "number") {
-      const id = targetOption.value;
-      setTest(false);
+  if (targetOption && typeof targetOption.value === "number") {
+    const id = targetOption.value;
+    setTest(false);
 
-      try {
-        if (!targetOption.isLeaf && test === false) {
-          // Load districts when selecting a province
-          const res = await axios.get(
-            "https://online-gateway.ghn.vn/shiip/public-api/master-data/district",
-            {
-              params: {
-                province_id: id,
-              },
-              headers: {
-                token: "49e20eea-4a6c-11ee-af43-6ead57e9219a",
-                ContentType: "application/json",
-              },
-            }
-          );
+    try {
+      if (!targetOption.isLeaf && test === false) {
+        // Load districts when selecting a province
+        const res = await axios.get(
+          "https://online-gateway.ghn.vn/shiip/public-api/master-data/district",
+          {
+            params: { province_id: id },
+            headers: {
+              token: "49e20eea-4a6c-11ee-af43-6ead57e9219a",
+              ContentType: "application/json",
+            },
+          }
+        );
 
-          const data = res.data.data.map((item: any) => ({
-            value: item.DistrictID,
-            label: item.DistrictName,
-            isLeaf: false,
-          }));
+        const data = res.data.data.map((item: any) => ({
+          value: item.DistrictID,
+          label: item.DistrictName,
+          isLeaf: false,
+        }));
 
-          targetOption.children = data;
-          setProvinces([...provinces]);
-          setTest(true);
-        } else {
-          console.log(id);
+        targetOption.children = data;
+        setProvinces([...provinces]);
+        setTest(true);
+      } else {
+        // Load wards when selecting a district
+        const res = await axios.get(
+          `https://online-gateway.ghn.vn/shiip/public-api/master-data/ward`,
+          {
+            params: { district_id: id },
+            headers: {
+              token: "49e20eea-4a6c-11ee-af43-6ead57e9219a",
+              ContentType: "application/json",
+            },
+          }
+        );
 
-          // Load wards when selecting a district
-          const res = await axios.get(
-            `https://online-gateway.ghn.vn/shiip/public-api/master-data/ward`,
-            {
-              params: {
-                district_id: id,
-              },
-              headers: {
-                token: "49e20eea-4a6c-11ee-af43-6ead57e9219a",
-                ContentType: "application/json",
-              },
-            }
-          );
+        const data = res.data.data.map((item: any) => ({
+          value: item.WardCode,
+          label: item.WardName,
+          isLeaf: true,
+        }));
 
-          const data = res.data.data.map((item: any) => ({
-            value: item.DistrictID,
-            label: item.WardName,
-            isLeaf: true,
-          }));
-
-          targetOption.children = data;
-          setProvinces([...provinces]);
-        }
-      } catch (error) {
-        console.error(error);
+        targetOption.children = data;
+        setProvinces([...provinces]);
       }
+    } catch (error) {
+      console.error(error);
     }
-  };
+  }
+};
+
 
   return (
     <Modal

@@ -10,7 +10,7 @@ const ShopLayout: React.FC = () => {
   return (
     <Layout>
       <Header />
-      <Content style={{ background: "white" }}>
+      <Content style={{ background: "whit" }}>
         <Outlet />
       </Content>
       <WebFooter />

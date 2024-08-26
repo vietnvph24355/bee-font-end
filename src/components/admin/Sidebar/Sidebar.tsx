@@ -102,7 +102,7 @@ const CustomSider: React.FC<{
       }}
     >
       <div className="demo-logo-vertical">
-        <img src={logo} alt="" width={"100%"} height={"100%"} />
+        <img src={logo} alt="" width={"100%"} height={"145%"} />
       </div>
       <Menu
         defaultSelectedKeys={[selectedKey]}

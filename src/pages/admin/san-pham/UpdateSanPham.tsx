@@ -74,7 +74,7 @@ const UpdateSanPham: React.FC = () => {
       message.success("sửa sản phẩm thành công");
     } catch (error) {
       console.log(error);
-      message.error("Sửa sản phẩm thất bại");
+      message.error(error.response.data);
     }
   };
   return (

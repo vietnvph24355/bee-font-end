@@ -89,8 +89,10 @@ function ModalDiaChi({ openModal, closeModal }) {
       const idTaiKhoan = localStorage.getItem("acountId");
       const res = await requestDC.put("dia-chi/updateTT/" + id, {
         trangThaiDiaChi: "DEFAULT",
+        
       });
       fetchDataAndLoadData();
+     
     } catch (error: any) {
       if (error.response && error.response.status === 400) {
       } else {
@@ -438,27 +440,35 @@ function ModalDiaChi({ openModal, closeModal }) {
 
   const fetchDataAndLoadData = async () => {
     setLoading(true);
-    const fetchedData = await fetchData(getParams(tableParams));
-    setData(fetchedData.content);
-    setCurrentPage(fetchedData.pageable.pageNumber + 1);
-    setPageSize(fetchedData.pageable.pageSize);
-    setLoading(false);
-    const updatedTableParams = {
-      ...tableParams,
-      pagination: {
-        showSizeChanger: true,
-        ...tableParams.pagination,
-        total: fetchedData.totalElements,
-        showTotal: (total: number, range: [number, number]) =>
-          `${range[0]}-${range[1]} of ${total} items`,
-      },
-    };
-
-    // Kiểm tra xem tableParams thực sự đã thay đổi
-    if (JSON.stringify(updatedTableParams) !== JSON.stringify(tableParams)) {
-      setTableParams(updatedTableParams);
+    try {
+      const fetchedData = await fetchData(getParams(tableParams));
+      console.log("Dữ liệu địa chỉ đã được lấy:", fetchedData); // Log dữ liệu đã lấy
+      setData(fetchedData.content);
+      setCurrentPage(fetchedData.pageable.pageNumber + 1);
+      setPageSize(fetchedData.pageable.pageSize);
+      setLoading(false);
+  
+      const updatedTableParams = {
+        ...tableParams,
+        pagination: {
+          showSizeChanger: true,
+          ...tableParams.pagination,
+          total: fetchedData.totalElements,
+          showTotal: (total: number, range: [number, number]) =>
+            `${range[0]}-${range[1]} of ${total} items`,
+        },
+      };
+  
+      // Kiểm tra xem tableParams thực sự đã thay đổi
+      if (JSON.stringify(updatedTableParams) !== JSON.stringify(tableParams)) {
+        setTableParams(updatedTableParams);
+      }
+    } catch (error) {
+      console.error("Lỗi khi lấy dữ liệu địa chỉ:", error); // Log lỗi nếu có
+      setLoading(false);
     }
   };
+  
   useEffect(() => {
     fetchDataAndLoadData();
     fetchProvinces();

@@ -74,7 +74,7 @@ function AddVoucherHoaDon({}) {
           navigate("/admin/voucher");
         } catch (error: any) {
           console.log(error);
-          message.error(error.response.data.message);
+          message.error(error.response.data);
           setLoading(false);
         }
       },
@@ -101,8 +101,7 @@ function AddVoucherHoaDon({}) {
           onFinish={onFinish}
           labelCol={{ span: 9 }}
           wrapperCol={{ span: 16 }}
-          style={{ maxWidth: 750 }}
-        >
+          style={{ maxWidth: 750 }}>
           <Form.Item
             name="ten"
             label="Tên voucher"
@@ -112,8 +111,7 @@ function AddVoucherHoaDon({}) {
                 whitespace: true,
                 message: "Vui lòng điền tên voucher!",
               },
-            ]}
-          >
+            ]}>
             <Input />
           </Form.Item>
           <Form.Item
@@ -124,8 +122,7 @@ function AddVoucherHoaDon({}) {
                 required: true,
                 message: "Vui lòng chọn ngày bắt đầu ~ ngày kết thúc !",
               },
-            ]}
-          >
+            ]}>
             <DatePicker.RangePicker
               style={{ width: "100%" }}
               presets={[
@@ -151,23 +148,20 @@ function AddVoucherHoaDon({}) {
                 required: true,
                 message: "Vui lòng chọn hình thức giảm giá !",
               },
-            ]}
-          >
+            ]}>
             <Select
               onChange={onChangeHinhThucGiamGia}
               placeholder="Chọn hình thức giảm giá"
               options={dataHinhThucGiamGia.map((values: any) => ({
                 label: values.ten,
                 value: values.id,
-              }))}
-            ></Select>
+              }))}></Select>
           </Form.Item>
           <Form.Item
             noStyle
             shouldUpdate={(prevValues, currentValues) =>
               prevValues.hinhThucGiam !== currentValues.hinhThucGiam
-            }
-          >
+            }>
             {({ getFieldValue }) =>
               getFieldValue("hinhThucGiam") === 1 ? (
                 <>
@@ -180,8 +174,7 @@ function AddVoucherHoaDon({}) {
                         required: true,
                         message: "Bạn chưa điền đơn tối thiểu!",
                       },
-                    ]}
-                  >
+                    ]}>
                     <InputNumber
                       style={{ width: "100%" }}
                       min={0}
@@ -191,29 +184,27 @@ function AddVoucherHoaDon({}) {
                     />
                   </Form.Item>
                   <Form.Item
-                      name="giamToiDa"
-                      label="Số tiền giảm"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Bạn chưa điền số tiền giảm!",
+                    name="giamToiDa"
+                    label="Số tiền giảm"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Bạn chưa điền số tiền giảm!",
+                      },
+                      {
+                        validator: (_, value) => {
+                          const donToiThieu = form.getFieldValue("donToiThieu");
+                          if (value >= donToiThieu) {
+                            return Promise.reject(
+                              new Error(
+                                "Số tiền giảm phải nhỏ hơn đơn tối thiểu!"
+                              )
+                            );
+                          }
+                          return Promise.resolve();
                         },
-                        {
-                          validator: (_, value) => {
-                            const donToiThieu =
-                              form.getFieldValue("donToiThieu");
-                            if (value >= donToiThieu) {
-                              return Promise.reject(
-                                new Error(
-                                  "Số tiền giảm phải nhỏ hơn đơn tối thiểu!"
-                                )
-                              );
-                            }
-                            return Promise.resolve();
-                          },
-                        },
-                      ]}
-                    >
+                      },
+                    ]}>
                     <InputNumber
                       // defaultValue={0}
                       style={{ width: "100%" }}
@@ -235,8 +226,7 @@ function AddVoucherHoaDon({}) {
                         required: true,
                         message: "Bạn chưa điền đơn tối thiểu!",
                       },
-                    ]}
-                  >
+                    ]}>
                     <InputNumber
                       style={{ width: "100%" }}
                       min={0}
@@ -267,8 +257,7 @@ function AddVoucherHoaDon({}) {
                           return Promise.resolve();
                         },
                       },
-                    ]}
-                  >
+                    ]}>
                     <InputNumber
                       defaultValue={0}
                       style={{ width: "100%" }}
@@ -297,8 +286,7 @@ function AddVoucherHoaDon({}) {
                           return Promise.resolve();
                         },
                       },
-                    ]}
-                  >
+                    ]}>
                     <InputNumber
                       defaultValue={0}
                       style={{ width: "100%" }}
@@ -317,8 +305,7 @@ function AddVoucherHoaDon({}) {
               <Button
                 type="dashed"
                 htmlType="reset"
-                style={{ margin: "0 12px" }}
-              >
+                style={{ margin: "0 12px" }}>
                 Reset
               </Button>
               <Button type="primary" htmlType="submit" loading={loading}>

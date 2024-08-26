@@ -894,39 +894,39 @@ const ThanhToan = ({ tamTinh, dataSanPham, soSanPham }) => {
       message.warning("Bạn chưa chọn sản phẩm nào để thanh toán!!.");
       return; // Ngăn chặn việc gửi biểu mẫu
     }
-  
+
     // Kiểm tra số lượng sản phẩm
     const isQuantityValid = dataSanPham.every(
       (item) => item.soLuong <= item.chiTietSanPham.soLuong
     );
-  
+
     if (!isQuantityValid) {
       message.warning("Số lượng sản phẩm trong giỏ hàng không hợp lệ.");
       return; // Ngăn chặn việc gửi biểu mẫu
     }
-  
+
     // Hàm lấy tên tỉnh từ ID
     const getProvinceLabelFromId = () => {
       const province = provinces.find((p) => p.value === values.thanhPho);
       return province?.label;
     };
-  
+
     // Hàm lấy tên quận/huyện từ ID
     const getDistrictLabelFromId = () => {
       const district = districts.find((d) => d.value === values.quanHuyen);
       return district?.label;
     };
-  
+
     // Hàm lấy tên phường/xã từ ID
     const getWardLabelFromId = () => {
       const ward = wards.find((w) => w.value === values.phuongXa);
       return ward?.label;
     };
-  
+
     const diaChi = `${
       values.diaChiCuThe
     }, ${getWardLabelFromId()}, ${getDistrictLabelFromId()}, ${getProvinceLabelFromId()}`;
-  
+
     confirm({
       title: "Xác Nhận",
       icon: <ExclamationCircleFilled />,
@@ -935,13 +935,13 @@ const ThanhToan = ({ tamTinh, dataSanPham, soSanPham }) => {
       cancelText: "Hủy",
       onOk: async () => {
         console.log(values);
-  
+
         try {
           setLoading(true);
-  
+
           const voucherObject = idVoucher != null ? { id: idVoucher } : null;
           const taiKhoanObject = idTaiKhoan != null ? { id: idTaiKhoan } : null;
-  
+
           // Tạo hóa đơn
           const res = await request.post("hoa-don", {
             giamGia: giamGiam,
@@ -959,27 +959,31 @@ const ThanhToan = ({ tamTinh, dataSanPham, soSanPham }) => {
             trangThaiHoaDon: "PENDING",
             idPhuongThuc: values.phuongThucThanhToan,
           });
-  
+
           console.log(res);
-  
+
           if (res.status === 201) {
             try {
               // Thêm chi tiết hóa đơn
               const hoaDonChiTietData = dataHoaDonChiTiet(res.data.id);
-              await request.post("hoa-don-chi-tiet/add-list", hoaDonChiTietData);
-  
+              await request.post(
+                "hoa-don-chi-tiet/add-list",
+                hoaDonChiTietData
+              );
+
               // Xóa sản phẩm đã chọn khỏi giỏ hàng
-let cartId = idGioHangTaiKhoan != null ? idGioHangTaiKhoan : idGioHangNull;
-await request.delete("gio-hang-chi-tiet/delete-selected", {
-  params: {
-    idGioHang: cartId,
-  },
-  data: dataSanPham.map((item) => item.chiTietSanPham.id), // Đảm bảo gửi danh sách ID đúng
-});
+              let cartId =
+                idGioHangTaiKhoan != null ? idGioHangTaiKhoan : idGioHangNull;
+              await request.delete("gio-hang-chi-tiet/delete-selected", {
+                params: {
+                  idGioHang: cartId,
+                },
+                data: dataSanPham.map((item) => item.chiTietSanPham.id), // Đảm bảo gửi danh sách ID đúng
+              });
             } catch (error) {
               console.log(error);
             }
-  
+
             try {
               // Tạo giao dịch
               const resGD = await request.post("giao-dich", {
@@ -993,7 +997,7 @@ await request.delete("gio-hang-chi-tiet/delete-selected", {
                 },
                 trangThaiGiaoDich: "PENDING",
               });
-  
+
               if (resGD.status === 201 && values.phuongThucThanhToan === 2) {
                 // Thanh toán VNPay
                 const resVNPay = await request.get("vn-pay/create-payment", {
@@ -1003,11 +1007,20 @@ await request.delete("gio-hang-chi-tiet/delete-selected", {
                   },
                 });
                 window.location.href = resVNPay.data;
-              } else if (resGD.status === 201 && values.phuongThucThanhToan === 3) {
+              } else if (
+                resGD.status === 201 &&
+                values.phuongThucThanhToan === 3
+              ) {
                 // Gửi email xác nhận
                 await requestClient.get(`don-hang/sendEmail/${res.data.id}`);
                 message.success("Đặt hàng thành công");
                 setLoading(false);
+                let idAcc = localStorage.getItem("acountId");
+                if (idAcc) {
+                  navigate("/don-hang");
+                } else {
+                  navigate("/");
+                }
                 navigate("/don-hang");
               }
             } catch (error) {
@@ -1022,8 +1035,7 @@ await request.delete("gio-hang-chi-tiet/delete-selected", {
       },
     });
   };
-  
-  
+
   useEffect(() => {
     const fetchProvinces = async () => {
       try {
@@ -1129,8 +1141,7 @@ await request.delete("gio-hang-chi-tiet/delete-selected", {
         layout="vertical"
         labelCol={{ span: 24 }}
         wrapperCol={{ span: 24 }}
-        initialValues={{ phuongThucThanhToan: 3 }}
-      >
+        initialValues={{ phuongThucThanhToan: 3 }}>
         <Card
           title={
             <Space>
@@ -1144,8 +1155,7 @@ await request.delete("gio-hang-chi-tiet/delete-selected", {
               )}
             </Space>
           }
-          bordered={true}
-        >
+          bordered={true}>
           <Form.Item label="Họ và Tên:">
             <Form.Item
               noStyle
@@ -1161,8 +1171,7 @@ await request.delete("gio-hang-chi-tiet/delete-selected", {
                   pattern: /^[\p{L}\s']+$/u,
                   message: "Họ và tên không hợp lệ!",
                 },
-              ]}
-            >
+              ]}>
               <Input />
             </Form.Item>
           </Form.Item>
@@ -1182,8 +1191,7 @@ await request.delete("gio-hang-chi-tiet/delete-selected", {
                     pattern: /^0[35789]\d{8}$/,
                     message: "Số điện thoại không hợp lệ!",
                   },
-                ]}
-              >
+                ]}>
                 <Input style={{ width: 230 }} />
               </Form.Item>
             </Form.Item>
@@ -1201,8 +1209,7 @@ await request.delete("gio-hang-chi-tiet/delete-selected", {
                     type: "email",
                     message: "E-mail không hợp lệ!",
                   },
-                ]}
-              >
+                ]}>
                 <Input style={{ width: 230 }} />
               </Form.Item>
             </Form.Item>
@@ -1217,8 +1224,7 @@ await request.delete("gio-hang-chi-tiet/delete-selected", {
                     required: true,
                     message: "Bạn chưa điền Tỉnh / Thành !",
                   },
-                ]}
-              >
+                ]}>
                 <Select
                   style={{ width: 150 }}
                   options={provinces}
@@ -1243,8 +1249,7 @@ await request.delete("gio-hang-chi-tiet/delete-selected", {
                     required: true,
                     message: "Bạn chưa điền Quận / Huyện!",
                   },
-                ]}
-              >
+                ]}>
                 <Select
                   style={{ width: 150 }}
                   options={districts}
@@ -1267,8 +1272,7 @@ await request.delete("gio-hang-chi-tiet/delete-selected", {
                     required: true,
                     message: "Bạn chưa điền Phường / Xã !",
                   },
-                ]}
-              >
+                ]}>
                 <Select
                   style={{ width: 150 }}
                   options={wards}
@@ -1288,8 +1292,7 @@ await request.delete("gio-hang-chi-tiet/delete-selected", {
                   whitespace: true,
                   message: "Bạn chưa điền đia chỉ!",
                 },
-              ]}
-            >
+              ]}>
               <Input />
             </Form.Item>
           </Form.Item>
@@ -1325,8 +1328,7 @@ await request.delete("gio-hang-chi-tiet/delete-selected", {
               size="large"
               type="link"
               style={{ float: "right", padding: 0 }}
-              onClick={() => setOpenModalVoucher(true)}
-            >
+              onClick={() => setOpenModalVoucher(true)}>
               Chọn Voucher
             </Button>
             <br />
@@ -1390,8 +1392,7 @@ await request.delete("gio-hang-chi-tiet/delete-selected", {
                 strong
                 style={{
                   marginTop: 10,
-                }}
-              >
+                }}>
                 Tổng thanh toán:
               </Text>
               <Text
@@ -1400,8 +1401,7 @@ await request.delete("gio-hang-chi-tiet/delete-selected", {
                   color: "red",
                   fontWeight: "bold",
                   marginLeft: "auto",
-                }}
-              >
+                }}>
                 {formatGiaTienVND(tongTien())}
               </Text>
             </div>
@@ -1418,8 +1418,7 @@ await request.delete("gio-hang-chi-tiet/delete-selected", {
             marginRight: 20,
             fontSize: "18px",
             fontWeight: "bold",
-          }}
-        >
+          }}>
           ĐẶT HÀNG
         </Button>
       </Form>

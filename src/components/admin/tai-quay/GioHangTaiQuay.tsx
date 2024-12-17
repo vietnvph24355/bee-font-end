@@ -839,9 +839,9 @@ const GioHangTaiQuay: React.FC<{ id: number; loadHoaDon: () => void }> = ({
                   }}
                 >
                   <Space>
-                    {/* <BsCreditCard2Back
+                    <BsCreditCard2Back
                       style={{ fontSize: 30, marginTop: 10 }}
-                    /> */}
+                    />
                     <span style={{ fontSize: 17, fontWeight: "bold" }}>
                       <img
                         src="https://pay.vnpay.vn/images/brands/logo-en.svg"

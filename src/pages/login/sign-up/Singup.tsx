@@ -68,7 +68,7 @@ const dangKiKhachHang: React.FC = () => {
       if (error.response && error.response.data) {
         message.error(error.response.data.message);
       } else if (error.response && error.response.status === 403) {
-        message.error("Email đã tồn tại trên hệ thống.");
+        message.error("Email OR SĐT đã tồn tại trên hệ thống.");
       } else {
         message.error("Có lỗi xảy ra khi tạo tài khoản.");
       }
